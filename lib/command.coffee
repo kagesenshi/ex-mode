@@ -64,9 +64,17 @@ class Command
 
     # Step 4: Address parsing
     lastLine = @editor.getBuffer().lines.length - 1
+    selection_range = @editor.getLastSelection().getScreenRange()
+    selection_end = selection_range.end.row
+    console.log(selection_range)
+    if selection_range.end.column == 0
+       selection_end = selection_end - 1
+    selection_range = [selection_range.start.row, selection_end]
     if cl[0] is '%'
       range = [0, lastLine]
       cl = cl[1..]
+    else if selection_range[0] != selection_range[1]
+      range = selection_range
     else
       addrPattern = ///^
         (?:                               # First address
